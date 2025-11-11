@@ -31,19 +31,19 @@ const toggleTraceBtn = document.getElementById("toggleTrace");
 const toggleVelocityBtn = document.getElementById("toggleVelocity");
 const toggleAccelBtn = document.getElementById("toggleAcceleration");
 
-let traceOn = true;
-toggleTraceBtn.onclick = () => {
-  traceOn = !traceOn;
+let traceOn = toggleTraceBtn.checked;
+toggleTraceBtn.onchange = () => {
+  traceOn = toggleTraceBtn.checked;
 };
 
-let velocityOn = false;
-toggleVelocityBtn.onclick = () => {
-  velocityOn = !velocityOn;
+let velocityOn = toggleVelocityBtn.checked;
+toggleVelocityBtn.onchange = () => {
+  velocityOn = toggleVelocityBtn.checked;
 };
 
-let accelOn = false;
-toggleAccelBtn.onclick = () => {
-  accelOn = !accelOn;
+let accelOn = toggleAccelBtn.checked;
+toggleAccelBtn.onchange = () => {
+  accelOn = toggleAccelBtn.checked;
 };
 
 let particles = [];
@@ -193,14 +193,14 @@ function animate(now) {
 
   // draw preview if dragging
   if (dragging && dragStart && previewPos) {
-    ctx.strokeStyle = "#8f8";
+    ctx.strokeStyle = "#00cc77";
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(dragStart.x, dragStart.y);
     ctx.lineTo(previewPos.x, previewPos.y);
     ctx.stroke();
     // small circle where projectile will start
-    ctx.fillStyle = "#8f8";
+    ctx.fillStyle = "#00cc77";
     ctx.beginPath();
     ctx.arc(dragStart.x, dragStart.y, 4, 0, Math.PI * 2);
     ctx.fill();
