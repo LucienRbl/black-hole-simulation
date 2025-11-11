@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Black Hole - Gravity Slingshot</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        background: #111;
+        color: #ddd;
+        font-family: Arial;
+      }
+      #ui {
+        position: fixed;
+        left: 10px;
+        top: 10px;
+        z-index: 10;
+      }
+      canvas {
+        display: block;
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+      }
+      button,
+      input {
+        margin: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="ui">
+      <button id="reset">Reset</button>
+      <button id="toggleTrace">Toggle Trace</button>
+      <button id="toggleVelocity">Toggle Velocity Vector</button>
+      <button id="toggleAcceleration">Toggle Acceleration Vector</button>
+      <div>
+        Click + drag to set projectile initial velocity and
+        release to fire.
+      </div>
+    </div>
+    <canvas id="c"></canvas>
+
+    <script src="simulation.js"></script>
+  </body>
+</html>
