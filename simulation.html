@@ -10,10 +10,7 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=refresh"
     />
-    <link
-      rel="icon"
-      href="icon.svg"
-    />
+    <link rel="icon" href="icon.svg" />
     <style>
       html,
       body {
@@ -28,6 +25,15 @@
         left: 10px;
         top: 10px;
         z-index: 10;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0 0 0px 0;
+      }
+      .author {
+        margin: 0 0 8px 0;
+        font-size: 14px;
+        color: #aaa;
       }
       canvas {
         display: block;
@@ -46,18 +52,6 @@
       button:hover {
         color: #fff;
       }
-      #reset {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 8px 12px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        transition: all 0.2s;
-      }
-      #reset:hover {
-        border-color: #fff;
-      }
       input[type="checkbox"] {
         width: 16px;
         height: 16px;
@@ -69,17 +63,41 @@
         align-items: center;
         gap: 8px;
         cursor: pointer;
+        margin-bottom: 4px;
       }
-      label:hover {
+
+      label.action span.material-symbols-outlined {
+        font-size: 20px;
+        color: #ddd;
+        cursor: pointer;
+      }
+
+      label.action:hover span.material-symbols-outlined {
+        color: #fff;
+      }
+      button.astext {
+        background: none;
+        border: none;
+        color: #ddd;
+        font: inherit;
+        cursor: pointer;
+        padding: 0;
+      }
+      button.astext:hover {
         color: #fff;
       }
     </style>
   </head>
   <body>
     <div id="ui">
-      <button id="reset">
-        <span class="material-symbols-outlined">refresh</span> Reset
-      </button>
+      <h1>Black Hole - Gravity Slingshot Simulation</h1>
+      <div class="author">by Lucien Reboul</div>
+
+      <label class="action">
+        <span class="material-symbols-outlined">refresh</span>
+        <button id="reset" class="astext">Reset</button>
+      </label>
+
       <label>
         <input type="checkbox" id="toggleTrace" checked />
         Toggle Trace
@@ -92,8 +110,9 @@
         <input type="checkbox" id="toggleAcceleration" />
         Toggle Acceleration Vector
       </label>
+
       <div>
-        Click + drag to set projectile initial velocity and release to fire.
+        Click + drag to set projectile initial velocity.
       </div>
     </div>
     <canvas id="c"></canvas>
