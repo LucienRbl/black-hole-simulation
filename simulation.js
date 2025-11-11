@@ -46,12 +46,11 @@ toggleAccelBtn.onclick = () => {
   accelOn = !accelOn;
 };
 
-
+let particles = [];
 
 // Particle (projectile) state
-let particle = null; // { x,y, vx,vy, ax,ay, trace: [] }
 function resetParticle() {
-  particle = null;
+  particles = [];
   clearCanvas();
 }
 resetBtn.onclick = resetParticle;
@@ -82,16 +81,16 @@ canvas.addEventListener("mouseup", (e) => {
   const vy = (end.y - start.y) * vscale;
 
   particle = {
-    x: start.x, 
-    y: start.y, 
-    vx: vx, 
-    vy: vy, 
-    ax: 0, 
-    ay: 0, 
+    x: start.x,
+    y: start.y,
+    vx: vx,
+    vy: vy,
+    ax: 0,
+    ay: 0,
     trace: [],
   };
+  particles.push(particle);
 });
-
 
 function clearCanvas() {
   ctx.fillStyle = "#1A1A1A";
@@ -207,11 +206,8 @@ function animate(now) {
     ctx.fill();
   }
 
-  if (particle) {
-    // advance physics with small substeps (for stability)
-    // We choose nsub such that dt_sub ~ dt (user dt)
-    const nsub = 1; // dt is already small and user-controlled
-    for (let i = 0; i < nsub; i++) {
+  if (particles.length > 0) {
+    for (const particle of particles) {
       const r = stepVerlet(particle, dt);
       // record trace
       particle.trace.push({ x: particle.x, y: particle.y });
@@ -219,8 +215,7 @@ function animate(now) {
       // swallow if inside black hole radius
       if (r < BH_RADIUS) {
         // particle swallowed
-        particle = null;
-        break;
+        particles.splice(particles.indexOf(particle), 1);
       }
       // also remove if offscreen far away
       if (
@@ -230,14 +225,14 @@ function animate(now) {
           particle.y < -2000 ||
           particle.y > innerHeight + 2000)
       ) {
-        particle = null;
-        break;
+        particles.splice(particles.indexOf(particle), 1);
       }
     }
   }
 
-  if (particle && velocityOn) {
+  if (particles.length > 0 && velocityOn) {
     const vScale = 5; // visual scaling for the arrow
+    for (const particle of particles) {
     ctx.strokeStyle = "rgba(80,200,255,0.9)";
     ctx.lineWidth = 2;
     ctx.beginPath();
@@ -254,25 +249,30 @@ function animate(now) {
     ctx.fillStyle = "#8ff";
     ctx.font = "12px Arial";
     ctx.fillText("v=" + vMag.toExponential(2), particle.x + 6, particle.y - 18);
+    }
   }
 
-  if (particle && accelOn) {
-    const acc = acceleration(particle);
+  if (particles.length > 0 && accelOn) {
     const aScale = 20; // visual scaling for the arrow
-    ctx.strokeStyle = "rgba(255,80,80,0.9)";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(particle.x, particle.y);
-    ctx.lineTo(particle.x + acc.ax * aScale, particle.y + acc.ay * aScale);
-    ctx.stroke();
-    // numeric readout
-    const aMag = Math.sqrt(acc.ax * acc.ax + acc.ay * acc.ay);
-    ctx.fillStyle = "#f88";
-    ctx.font = "12px Arial";
-    ctx.fillText("a=" + aMag.toExponential(2), particle.x + 6, particle.y - 6);
+    for (const particle of particles) {
+      const acc = acceleration(particle);
+      ctx.strokeStyle = "rgba(255,80,80,0.9)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(particle.x, particle.y);
+      ctx.lineTo(particle.x + acc.ax * aScale, particle.y + acc.ay * aScale);
+      ctx.stroke();
+      // numeric readout
+      const aMag = Math.sqrt(acc.ax * acc.ax + acc.ay * acc.ay);
+      ctx.fillStyle = "#f88";
+      ctx.font = "12px Arial";
+      ctx.fillText("a=" + aMag.toExponential(2), particle.x + 6, particle.y - 6);
+    }
   }
 
-  drawParticle(particle);
+  for (particle of particles) {
+    drawParticle(particle);
+  }
 
   requestAnimationFrame(animate);
 }
